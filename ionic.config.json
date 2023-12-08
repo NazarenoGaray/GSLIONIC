@@ -1,0 +1,7 @@
+{
+  "name": "GSLAPP",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
