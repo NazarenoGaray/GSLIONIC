@@ -1,17 +1,24 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content>
+  <div class="wrapper fadeInDown d-flex flex-column justify-content-center align-items-center margin">
+    <div id="formContent" class="text-center">
+      <div class="fadeIn">
+        <p>Por favor inicie sesión.</p>
+      </div>
+      <form class="col-9 mx-auto">
+        <ion-input type="text" id="Usuario" name="email" [(ngModel)]="email" placeholder="Usuario"></ion-input>
+        <ion-input type="password" id="password" name="password" [(ngModel)]="password" placeholder="Contraseña"></ion-input>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+        <ion-button expand="full" (click)="onSubmit()">Iniciar sesión</ion-button>
+        <ion-alert *ngIf="credenciales" header="Credenciales incorrectas" message="Por favor, verifique sus credenciales." buttons="Aceptar"></ion-alert>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+        <hr class="my-4">
+
+        <ion-button expand="full" (click)="loginWithGoogle()">
+          <ion-icon name="logo-google" class=""></ion-icon>
+          Ingresar con Google
+        </ion-button>
+      </form>
+    </div>
+  </div>
 </ion-content>
+
