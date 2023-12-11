@@ -6,16 +6,12 @@
 </ion-header>
 
 <ion-content>
-  <div class="message-wrap">
-
-    <div *ngFor="let msg of msgList" class="message" [class.left]="msg.remitente === toUser.id" [class.right]="msg.remitente === user.id">
-      <img class="user-img" *ngIf="msg.remitente === toUser.id; else otherImage" [src]="toUser.photoURL" alt="">
-      <ng-template #otherImage>
-        <img class="user-img" [src]="user.photoURL" alt="">
-      </ng-template>
-      <!-- <ion-spinner name="dots" *ngIf="msg.status === 'pending'"></ion-spinner> -->
+  <div class="message-wrap" *ngFor="let msg of msgList" [class.left]="msg.remitente === toUser.id" [class.right]="!(msg.remitente === toUser.id)">
+    <div class="message" >
+      <!-- <img class="user-img" [src]="(msg.remitente === toUser.id) ? toUser.photoURL : user.photoURL" alt=""> -->
+      <img class="user-img" *ngIf="msg.remitente === toUser.id" [src]="toUser.photoURL">
       <div class="msg-detail">
-        <div class="msg-info" *ngIf="msg.remitente === toUser.id">
+        <div class="msg-info">
           <p>{{ toUser.nombre }} &nbsp;&nbsp;&nbsp;{{ msg.fecha }} {{ msg.hora }}</p>
         </div>
         <div class="msg-content">
@@ -23,19 +19,20 @@
           <p class="line-breaker">{{ msg.texto }}</p>
         </div>
       </div>
+      <img class="user-img" *ngIf="msg.remitente === user.id" [src]="user.photoURL">
     </div>
-
   </div>
 </ion-content>
 
-<ion-footer no-border [style.height]="showEmojiPicker ? '255px' : '55px'">
+<ion-footer no-border [style.height]="showEmojiPicker ? '255px' : '55px'" *ngIf="msgList">
   <div class="input-wrap">
     <!-- <button ion-button clear icon-only item-right (click)="switchEmojiPicker()">
       <ion-icon name="md-happy"></ion-icon>
     </button> -->
     <textarea #chat_input placeholder="Text Input" [(ngModel)]="editorMsg" (keyup.enter)="sendMsg()" (focusin)="onFocus()"></textarea>
     <button ion-button clear icon-only item-right (click)="sendMsg()">
-      <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
+      <!-- <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon> -->
+      <ion-icon class="fa fa-paper-plane fa-2x" aria-hidden="true"></ion-icon>
     </button>
   </div>
   <emoji-picker [(ngModel)]="editorMsg"></emoji-picker>

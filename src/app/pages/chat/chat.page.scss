@@ -13,7 +13,7 @@ ion-header {
   
   .message-wrap {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     padding: 10px;
   }
   
@@ -23,11 +23,11 @@ ion-header {
     margin-bottom: 10px;
   }
   
-  .message.left {
+  .left {
     align-items: flex-start;
   }
   
-  .message.right {
+  .right {
     align-items: flex-end;
   }
   

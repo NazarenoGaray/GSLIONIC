@@ -5,7 +5,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { Mensaje } from 'src/app/clases/mensaje.model';
 import { Usuario } from 'src/app/clases/usuario';
 import { IonContent } from '@ionic/angular';
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 
@@ -29,39 +29,52 @@ export class ChatPage  implements OnInit {
   
   constructor(
     private route: ActivatedRoute,
-    private firestore: AngularFirestore
+    private firestore: AngularFirestore,
+    private cdr: ChangeDetectorRef
     ) {
     
     
   }
 
   ngOnInit() {
-    const userDataString = sessionStorage.getItem('USER_DATA');
-    if (userDataString) {
-      const userData = JSON.parse(userDataString);
-      this.user = userData;
-      console.log('id logueado:', this.user.id);
-      const userId = this.route.snapshot.paramMap.get('id');
-    
+    // const userDataString = sessionStorage.getItem('USER_DATA');
+    const userId = this.route.snapshot.paramMap.get('id');
+    // if (userDataString) {
+    //   const userData = JSON.parse(userDataString);
+    //   this.user = userData;
+    //   console.log('id logueado:', this.user.id);
+      
+      this.firestore.collection('usuarios').doc('uSmMAeQbA0dJiH94DRA3Pmir7I83').valueChanges().subscribe((user: any) => {
+        this.user = user;
+        console.log('User encontrado:', this.user);
+      }, error => {
+        console.error('Error al obtener el usuario:', error);
+      });
+      //this.user.id = "uSmMAeQbA0dJiH94DRA3Pmir7I83";
+    //   console.log('id logueado:', this.user.id);
+
     if (userId) {
       this.firestore.collection('usuarios').doc(userId).valueChanges().subscribe((user: any) => {
         this.toUser = user;
-        console.log('Usuario encontrado:', this.toUser);
+        console.log('ToUser encontrado:', this.toUser);
         this.getMsg();
+        this.cdr.detectChanges();
       }, error => {
         console.error('Error al obtener el usuario:', error);
       });
     } else {
       console.error('No se proporcionó un ID de usuario en navParams.');
     }
-    } else {
-      console.log('id logueado:', userDataString);
-    }
+    // } else {
+    //   console.log('id logueado:', userDataString);
+    // }
     this.otherImage = this.user.photoURL;
     
   }
 
-
+  ngAfterViewInit() {
+    this.cdr.detectChanges();
+  }
   // ionViewWillLeave() {
   //   // unsubscribe
   //   this.chatReceived.emit(msg);
@@ -113,9 +126,9 @@ export class ChatPage  implements OnInit {
       const mensajesValidos = mensajes.filter(mensaje => mensaje !== undefined);
 
       const mensajesOrdenados = mensajesValidos.sort((a, b) => {
-        const comparacionFecha = a.fecha.localeCompare(b.fecha);
-        const comparacionHora = a.hora.localeCompare(b.hora);
-        return comparacionFecha || comparacionHora;
+        const fechaHoraA = `${a.fecha} ${a.hora}`;
+        const fechaHoraB = `${b.fecha} ${b.hora}`;
+        return fechaHoraA.localeCompare(fechaHoraB);
       });
 
       this.msgList = mensajesOrdenados;
@@ -180,7 +193,7 @@ export class ChatPage  implements OnInit {
   private focus() {
     if (this.messageInput && this.messageInput.nativeElement) {
       this.messageInput.nativeElement.focus();
-    }
+    } 
   }
 
   private setTextareaScroll() {

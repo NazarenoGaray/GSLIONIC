@@ -9,12 +9,20 @@
 <ion-content [fullscreen]="true">
   <ion-list>
     <ion-item *ngFor="let usuario of usuarios | async" >
-      <ion-avatar slot="start" [routerLink]="['/tabs/chat', usuario.id]">
+      <ion-avatar slot="start">
         <img [src]="usuario.photoURL" alt="Avatar">
       </ion-avatar>
       <ion-label >
         <h2>{{ usuario.nombre }} {{ usuario.apellido }}</h2>
       </ion-label>
+      <ion-buttons slot="end">
+        <ion-button [routerLink]="['/tabs/chat', usuario.id]">
+          <ion-icon class="fa fa-comments" aria-hidden="true"></ion-icon>
+        </ion-button>
+        <ion-button [routerLink]="['/tabs/tab4', usuario.id]">
+          <ion-icon class="fa fa-user " aria-hidden="true"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-item>
   </ion-list>
 </ion-content>
